@@ -13,7 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.hashim.scoppedstorage.CheckPemission.checkPermissionForReadWrite
+import com.hashim.scoppedstorage.CheckPemission.hCheckForReadWritePermissions
 import com.hashim.scoppedstorage.CheckPemission.hRequestPermissionForReadWrite
 import com.hashim.scoppedstorage.Constants.DELETE_PERMISSION_REQUEST
 import com.hashim.scoppedstorage.R
@@ -64,7 +64,7 @@ class ImagePickerActivity : AppCompatActivity() {
         hActivityImagePickerBinding.hOpenAlbumIv.setOnClickListener { hOpenMediaStore() }
         hActivityImagePickerBinding.hGrantPermissionsButton.setOnClickListener { hOpenMediaStore() }
 
-        if (!checkPermissionForReadWrite(this)) {
+        if (!hCheckForReadWritePermissions(this)) {
             hActivityImagePickerBinding.hStartUpView.visibility = View.VISIBLE
         } else {
             hLoadImages()
@@ -86,7 +86,7 @@ class ImagePickerActivity : AppCompatActivity() {
     }
 
     private fun hOpenMediaStore() {
-        if (checkPermissionForReadWrite(this)) {
+        if (hCheckForReadWritePermissions(this)) {
             hLoadImages()
         } else {
             hRequestPermissionForReadWrite(this)

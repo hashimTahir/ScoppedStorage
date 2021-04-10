@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ScoppedStorage">
-        <activity android:name=".imagepicker.ImagePickerActivity"></activity>
+        <activity android:name=".downloadImage.DownLoadImageActivity"></activity>
+        <activity android:name=".imagepicker.ImagePickerActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

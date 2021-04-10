@@ -16,7 +16,6 @@ import timber.log.Timber
 object CheckPemission {
 
 
-    //Check if Permission granted
 
     fun checkPermissionForAML(context: Context): Boolean {
         Timber.d("checkPermissionForAML")
@@ -39,7 +38,7 @@ object CheckPemission {
 
     }
 
-    fun checkPermissionForReadWrite(context: Context): Boolean {
+    fun hCheckForReadWritePermissions(context: Context): Boolean {
        Timber.d( "checkPermissionForREadWriteBelowP")
         val result: Int =
             ContextCompat.checkSelfPermission(

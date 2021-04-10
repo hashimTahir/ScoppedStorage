@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.hashim.scoppedstorage.databinding.ActivityMainBinding
+import com.hashim.scoppedstorage.downloadImage.DownLoadImageActivity
 import com.hashim.scoppedstorage.imagepicker.ImagePickerActivity
 
 class MainActivity : AppCompatActivity() {
@@ -29,11 +30,19 @@ class MainActivity : AppCompatActivity() {
             hLaunchImagePicker()
         }
 
+        hActivityMainBinding.hDownloadImageB.setOnClickListener {
+            hDownloadImage()
+        }
     }
 
 
     fun hLaunchImagePicker() {
         startActivity(Intent(this@MainActivity, ImagePickerActivity::class.java))
+    }
+
+    fun hDownloadImage() {
+
+        startActivity(Intent(this@MainActivity, DownLoadImageActivity::class.java))
     }
 
 
