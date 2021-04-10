@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2021/  4/ 10.  Created by Hashim Tahir
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/hImageRv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".2" />
+
+    <LinearLayout
+        android:id="@+id/hPermissionRationaleView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/top_guideline"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/hImageview"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_launcher_background"
+            app:tint="@color/purple_500" />
+
+        <TextView
+            android:id="@+id/hPermissionRequiredTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="72dp"
+            android:layout_marginEnd="72dp"
+            android:gravity="center"
+            android:paddingTop="16dp"
+            android:text="@string/permission_not_granted" />
+
+        <Button
+            android:id="@+id/hGrantPermissionsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/grant_permission" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/hStartUpView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/top_guideline"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/hPhotoAlbumIv"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_launcher_background"
+            app:tint="@color/purple_500" />
+
+        <Button
+            android:id="@+id/hOpenAlbumIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/open_album" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

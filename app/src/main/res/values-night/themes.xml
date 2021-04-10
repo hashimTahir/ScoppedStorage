@@ -1,3 +1,7 @@
+<!--
+  ~ Copyright (c) 2021/  4/ 10.  Created by Hashim Tahir
+  -->
+
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.ScoppedStorage" parent="Theme.MaterialComponents.DayNight.DarkActionBar">

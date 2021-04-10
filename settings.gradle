@@ -1,2 +1,6 @@
+/*
+ * Copyright (c) 2021/  4/ 10.  Created by Hashim Tahir
+ */
+
 include ':app'
 rootProject.name = "ScoppedStorage"
