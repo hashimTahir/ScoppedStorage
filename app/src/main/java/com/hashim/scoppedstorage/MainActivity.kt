@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.hashim.scoppedstorage.accessMedia.AccessMediaLocationActivity
 import com.hashim.scoppedstorage.databinding.ActivityMainBinding
 import com.hashim.scoppedstorage.downloadImage.DownLoadImageActivity
 import com.hashim.scoppedstorage.imagepicker.ImagePickerActivity
@@ -33,6 +34,16 @@ class MainActivity : AppCompatActivity() {
         hActivityMainBinding.hDownloadImageB.setOnClickListener {
             hDownloadImage()
         }
+
+        hActivityMainBinding.hAccessMediaB.setOnClickListener {
+            hAccessMediaLocation()
+
+
+        }
+    }
+    fun hAccessMediaLocation() {
+
+        startActivity(Intent(this@MainActivity, AccessMediaLocationActivity::class.java))
     }
 
 

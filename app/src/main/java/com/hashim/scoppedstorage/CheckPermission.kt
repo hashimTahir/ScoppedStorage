@@ -17,7 +17,7 @@ object CheckPemission {
 
 
 
-    fun checkPermissionForAML(context: Context): Boolean {
+    fun hCheckAMLpermissions(context: Context): Boolean {
         Timber.d("checkPermissionForAML")
         val result: Int =
             ContextCompat.checkSelfPermission(
@@ -28,7 +28,7 @@ object CheckPemission {
     }
 
 
-    fun requestPermissionForAML(context: Context) {
+    fun hRequestAMLPermissions(context: Context) {
         Timber.d("requestPermissionForAML")
 
         ActivityCompat.requestPermissions(
