@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.hashim.scoppedstorage.accessMedia.AccessMediaLocationActivity
 import com.hashim.scoppedstorage.databinding.ActivityMainBinding
 import com.hashim.scoppedstorage.downloadImage.DownLoadImageActivity
+import com.hashim.scoppedstorage.file.FileActivity
 import com.hashim.scoppedstorage.imagepicker.ImagePickerActivity
 
 class MainActivity : AppCompatActivity() {
@@ -37,10 +38,18 @@ class MainActivity : AppCompatActivity() {
 
         hActivityMainBinding.hAccessMediaB.setOnClickListener {
             hAccessMediaLocation()
+        }
 
-
+        hActivityMainBinding.hPickFileB.setOnClickListener {
+            hStartFileActivity()
         }
     }
+
+
+        fun hStartFileActivity() {
+        startActivity(Intent(this@MainActivity, FileActivity::class.java))
+    }
+
     fun hAccessMediaLocation() {
 
         startActivity(Intent(this@MainActivity, AccessMediaLocationActivity::class.java))

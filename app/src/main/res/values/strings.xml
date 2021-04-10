@@ -33,7 +33,7 @@
     <string name="download_image_WithMediaStore">Download Image With Media Store to Internal Storage(Pictures folder) </string>
     <string name="download_image_WithMediaStore_to_sdCard">Download Image With Media Store to SD Card(Pictures folder)</string>
     <string name="access_media_location">Access Media Location</string>
-    <string name="file_demo">File Demo</string>
+    <string name="file_demo">File Pick</string>
     <string name="open_document_tree_demo">Open Document Tree Demo</string>
     <string name="click_here_to_open_doc_tree">Click Here To open Doc Tree</string>
     <string name="path_for_image">Path: %1$s</string>
