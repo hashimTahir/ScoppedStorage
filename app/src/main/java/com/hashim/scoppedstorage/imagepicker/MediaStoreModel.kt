@@ -13,7 +13,7 @@ data class MediaStoreModel(
     val displayName: String,
     val dateTaken: Date,
     val contentUri: Uri
-){
+) {
     companion object {
         val DiffCallback = object : DiffUtil.ItemCallback<MediaStoreModel>() {
             override fun areItemsTheSame(oldItem: MediaStoreModel, newItem: MediaStoreModel) =

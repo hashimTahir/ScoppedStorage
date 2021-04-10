@@ -16,7 +16,6 @@ import timber.log.Timber
 object CheckPemission {
 
 
-
     fun hCheckAMLpermissions(context: Context): Boolean {
         Timber.d("checkPermissionForAML")
         val result: Int =
@@ -39,7 +38,7 @@ object CheckPemission {
     }
 
     fun hCheckForReadWritePermissions(context: Context): Boolean {
-       Timber.d( "checkPermissionForREadWriteBelowP")
+        Timber.d("checkPermissionForREadWriteBelowP")
         val result: Int =
             ContextCompat.checkSelfPermission(
                 context,
@@ -51,7 +50,7 @@ object CheckPemission {
 
 
     fun hRequestPermissionForReadWrite(context: Context) {
-       Timber.d( "requestPermissionForREadWriteBelowP")
+        Timber.d("requestPermissionForREadWriteBelowP")
 
         ActivityCompat.requestPermissions(
             context as Activity,

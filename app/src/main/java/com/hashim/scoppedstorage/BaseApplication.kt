@@ -18,15 +18,16 @@ class BaseApplication : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(object : DebugTree() {
                 override fun log(
-                        priority: Int,
-                        tag: String?,
-                        message: String,
-                        t: Throwable?) {
+                    priority: Int,
+                    tag: String?,
+                    message: String,
+                    t: Throwable?
+                ) {
                     super.log(
-                            priority,
-                            String.format(Constants.hTag, tag),
-                            message,
-                            t
+                        priority,
+                        String.format(Constants.hTag, tag),
+                        message,
+                        t
                     )
                 }
             })

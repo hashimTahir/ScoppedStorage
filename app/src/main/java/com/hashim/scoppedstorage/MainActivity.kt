@@ -13,6 +13,7 @@ import com.hashim.scoppedstorage.accessMedia.AccessMediaLocationActivity
 import com.hashim.scoppedstorage.databinding.ActivityMainBinding
 import com.hashim.scoppedstorage.downloadImage.DownLoadImageActivity
 import com.hashim.scoppedstorage.file.FileActivity
+import com.hashim.scoppedstorage.foldertree.OpenFolderActivity
 import com.hashim.scoppedstorage.imagepicker.ImagePickerActivity
 
 class MainActivity : AppCompatActivity() {
@@ -29,40 +30,23 @@ class MainActivity : AppCompatActivity() {
     private fun hSetupListerns() {
 
         hActivityMainBinding.hImagePickerB.setOnClickListener {
-            hLaunchImagePicker()
+            startActivity(Intent(this, ImagePickerActivity::class.java))
         }
 
         hActivityMainBinding.hDownloadImageB.setOnClickListener {
-            hDownloadImage()
+            startActivity(Intent(this, DownLoadImageActivity::class.java))
         }
 
         hActivityMainBinding.hAccessMediaB.setOnClickListener {
-            hAccessMediaLocation()
+            startActivity(Intent(this, AccessMediaLocationActivity::class.java))
         }
 
         hActivityMainBinding.hPickFileB.setOnClickListener {
-            hStartFileActivity()
+            startActivity(Intent(this, FileActivity::class.java))
         }
-    }
-
-
-        fun hStartFileActivity() {
-        startActivity(Intent(this@MainActivity, FileActivity::class.java))
-    }
-
-    fun hAccessMediaLocation() {
-
-        startActivity(Intent(this@MainActivity, AccessMediaLocationActivity::class.java))
-    }
-
-
-    fun hLaunchImagePicker() {
-        startActivity(Intent(this@MainActivity, ImagePickerActivity::class.java))
-    }
-
-    fun hDownloadImage() {
-
-        startActivity(Intent(this@MainActivity, DownLoadImageActivity::class.java))
+        hActivityMainBinding.hOpenDocTreeB.setOnClickListener {
+            startActivity(Intent(this, OpenFolderActivity::class.java))
+        }
     }
 
 

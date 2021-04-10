@@ -102,9 +102,9 @@ class FileActivity : AppCompatActivity() {
         val hPage = hPdfDocument.startPage(hPageInfo)
         val hCanvas = hPage.canvas
         val hPaint = Paint()
-        hPaint.setColor(Color.RED)
+        hPaint.color = Color.RED
         hCanvas.drawCircle(50F, 50F, 30F, hPaint)
-        hPaint.setColor(Color.BLACK)
+        hPaint.color = Color.BLACK
         hCanvas.drawText("aaabbbccc", 80F, 50F, hPaint)
         hPdfDocument.finishPage(hPage)
 
@@ -122,7 +122,7 @@ class FileActivity : AppCompatActivity() {
 
         if (hItems != null) {
             hContentResolver.openOutputStream(hItems).use { out ->
-                hPdfDocument.writeTo(out);
+                hPdfDocument.writeTo(out)
             }
         }
         hContentValues.clear()

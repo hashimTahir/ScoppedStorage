@@ -1,52 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2021/  4/ 11.  Created by Hashim Tahir
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <Button
-        android:layout_marginTop="20dp"
         android:id="@+id/hChooseMediaFileB"
-        android:layout_gravity="center"
-        android:text="@string/choose_image_file"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="@string/choose_image_file"
+        android:textAllCaps="false" />
 
     <ImageView
         android:id="@+id/hImageV"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop"
         android:layout_width="100dp"
-        android:layout_height="100dp"/>
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:scaleType="centerCrop" />
 
     <TextView
-        android:layout_marginTop="10dp"
         android:id="@+id/hImagePathTv"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:id="@+id/hImageLocationTv"
-        android:textStyle="bold"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_marginEnd="10dp" />
 
     <TextView
-        android:layout_marginTop="10dp"
-        android:id="@+id/hImageLocationTagTv"
-        android:textStyle="bold"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:id="@+id/hImageLocationTv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/hImageLocationTagTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:textStyle="bold" />
 
 </LinearLayout>

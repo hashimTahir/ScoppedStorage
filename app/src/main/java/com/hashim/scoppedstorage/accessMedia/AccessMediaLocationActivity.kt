@@ -85,10 +85,11 @@ class AccessMediaLocationActivity : AppCompatActivity() {
                             getString(R.string.lat_for_image),
                             exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE)
                         )
-                        hActivityAccessMediaLocationBinding.hImageLocationTagTv.text = String.format(
-                            getString(R.string.lat_for_image),
-                            exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)
-                        )
+                        hActivityAccessMediaLocationBinding.hImageLocationTagTv.text =
+                            String.format(
+                                getString(R.string.lat_for_image),
+                                exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)
+                            )
                     } catch (e: IOException) {
                         Timber.d("Exception ${e.message}")
                     } finally {
