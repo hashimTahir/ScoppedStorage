@@ -4,7 +4,9 @@
 
 package com.hashim.scoppedstorage.madesimple
 
+import android.app.RecoverableSecurityException
 import android.content.ContentUris
+import android.content.ContentValues
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
@@ -47,6 +49,7 @@ class ExplanationActivity : AppCompatActivity() {
         hQueryAllMedia()
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     private fun hQueryAllMedia() {
 
         /*Not passing anything for seletion, selection arguments and sort order*/
@@ -64,7 +67,7 @@ class ExplanationActivity : AppCompatActivity() {
         }
 
     }
-
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*Where to look*/
     fun hGetCollectionUri(
@@ -106,9 +109,9 @@ class ExplanationActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     fun hOpenFileWithDescriptor(uri: Uri) {
         // Open a specific media item using ParcelFileDescriptor.
         val hContentResolver = applicationContext.contentResolver
@@ -121,6 +124,7 @@ class ExplanationActivity : AppCompatActivity() {
         }
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     fun hOpenFileWithFileStream(uri: Uri) {
         // Open a specific media item using InputStream.
         val hResolver = applicationContext.contentResolver
@@ -130,9 +134,7 @@ class ExplanationActivity : AppCompatActivity() {
 
     }
 
-
-
-
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     /*
     * Apps that target Android 10 or higher can access the unique name that the system assigns
     * to each external storage volume. This naming system helps to efficiently organize and
@@ -154,7 +156,7 @@ class ExplanationActivity : AppCompatActivity() {
         val hFirstVolumeName = hVolumesNames.iterator().next()
 
     }
-
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
     * Location where media was captured
@@ -187,6 +189,7 @@ class ExplanationActivity : AppCompatActivity() {
         }
 
     }
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
     * To access location information within a video's metadata, use the
@@ -212,6 +215,7 @@ class ExplanationActivity : AppCompatActivity() {
         val hLocationMetaData: String? =
             hMediaMetaDataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_LOCATION)
     }
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
     @RequiresApi(Build.VERSION_CODES.Q)
     fun hCreateThumbNail(uri: Uri) {
@@ -221,7 +225,115 @@ class ExplanationActivity : AppCompatActivity() {
             )
 
     }
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /*Say after creating an audio file, to save it afterwards
+    * If app performs potentially time-consuming operations, such as writing
+    *  to media files, it's useful to have exclusive access to the file as it's
+    *  being processed. On devices that run Android 10 or higher, this exclusive access
+    * can be  set by the value of the IS_PENDING flag to 1. Only the app
+    * in working can view the file until this app changes the value of IS_PENDING back to 0.
+    * */
+    fun hAddNewItem() {
+        val hResolver = applicationContext.contentResolver
+
+        /*Since Volume external primary has read/write */
+        val hAudioCollection =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                MediaStore.Audio.Media.getContentUri(
+                    MediaStore.VOLUME_EXTERNAL_PRIMARY
+                )
+            } else {
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+            }
+
+        // Publish a new song.
+        val hAudioDetails = ContentValues().apply {
+            put(MediaStore.Audio.Media.DISPLAY_NAME, "My audio.mp3")
+            put(MediaStore.Audio.Media.IS_PENDING, 1)
+            /*put other details here*/
+        }
+        val hInsertedAudio = hResolver
+            .insert(hAudioCollection, hAudioDetails)
+
+        hResolver.openFileDescriptor(hInsertedAudio!!, "w", null)
+            .use {
+                // Write data into the pending audio file.
+            }
+
+//        release the "pending" status, and allow other apps to play the audio track.
+        hAudioDetails.clear()
+        hAudioDetails.put(MediaStore.Audio.Media.IS_PENDING, 0)
+        hResolver.update(hInsertedAudio, hAudioDetails, null, null)
+
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    fun hUpdateItem(orignalSongsUri: Uri) {
+        val hMediaId = 0     // MediaStore.Audio.Media._ID of item to update.
+        val hResolver = applicationContext.contentResolver
+
+        // When performing a single item update, prefer using the ID
+        val hSelection = "${MediaStore.Audio.Media._ID} = ?"
+
+        val hSelectionArguments = arrayOf(hMediaId.toString())
+
+        // Update an existing song.
+        val hSongDetialsToUpdate = ContentValues().apply {
+            put(MediaStore.Audio.Media.DISPLAY_NAME, "test Song.mp3")
+            put(MediaStore.Audio.Media.ALBUM, "abc")
+        }
+
+        // Use the individual song's URI to represent the collection that's updated.
+        /*Use resolvers delete to delete the file*/
+        val hUdatedSong = hResolver.update(
+            orignalSongsUri!!,
+            hSongDetialsToUpdate,
+            hSelection,
+            hSelectionArguments
+        )
+    }
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+    * Update other apps' media files
+    * If  app uses scoped storage, it ordinarily cannot update a media file
+    * that a different app contributed to the media store. It's still possible to
+    * get user consent to modify the file, however, by catching the
+    * RecoverableSecurityException that the platform throws. One can then request that
+    * the user grant your app write access to that specific item.
+    *
+    * This process should be completed each time your app needs to modify a
+    * media file that it didn't create.
+    * */
+
+    fun hUpdateOtherMediaNotBelongingToMyApp(uri: Uri) {
+        try {
+            contentResolver.openFileDescriptor(uri, "w")?.use {
+                /*What you want to change or modify*/
+            }
+        } catch (securityException: SecurityException) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val hRecoverableSecurityException = securityException as?
+                        RecoverableSecurityException
+                    ?: throw RuntimeException(securityException.message, securityException)
+
+                val hIntentSender =
+                    hRecoverableSecurityException.userAction.actionIntent.intentSender
+                hIntentSender?.let {
+                    startIntentSenderForResult(
+                        hIntentSender, 12,
+                        null, 0, 0, 0, null
+                    )
+                }
+            } else {
+                throw RuntimeException(securityException.message, securityException)
+            }
+        }
+
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     /*What to retireve*/
     fun hGetProjection(mediaTypes: MediaTypes): Array<String> {
         return when (mediaTypes) {
@@ -259,6 +371,7 @@ class ExplanationActivity : AppCompatActivity() {
         }
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     /*where clause with place holders*/
     fun hGetSelection(mediaTypes: MediaTypes): String? {
         return when (mediaTypes) {
@@ -275,10 +388,9 @@ class ExplanationActivity : AppCompatActivity() {
                 null
             }
         }
-
-
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     /*values of placeholder variables*/
     fun hGetSelectionArgs() {
         /*Add conditions, whatever is required. below is just an example*/
@@ -287,11 +399,13 @@ class ExplanationActivity : AppCompatActivity() {
         )
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     fun hGetSortOrder() {
         /*Add conditions, whatever is required. below is just an example*/
         val sortOrder = "${MediaStore.Video.Media.DISPLAY_NAME} ASC"
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     fun hCreateQuery(
         collection: Uri,
         projection: Array<String>,
@@ -308,6 +422,7 @@ class ExplanationActivity : AppCompatActivity() {
         )
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     fun hQueryImages(): MutableList<Image> {
         val hImageList = mutableListOf<Image>()
         hCreateQuery(
@@ -337,6 +452,7 @@ class ExplanationActivity : AppCompatActivity() {
         return hImageList
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     fun hQueryVideos(): MutableList<Video> {
         val hVideoList = mutableListOf<Video>()
         hCreateQuery(
@@ -366,6 +482,7 @@ class ExplanationActivity : AppCompatActivity() {
         }
         return hVideoList
     }
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
     fun hQueryAudios(): MutableList<Audio> {
         val hAudioList = mutableListOf<Audio>()
@@ -397,6 +514,7 @@ class ExplanationActivity : AppCompatActivity() {
         }
         return hAudioList
     }
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
     fun hQueryDocs(): MutableList<Docs> {
         val hDosList = mutableListOf<Docs>()
@@ -437,7 +555,55 @@ class ExplanationActivity : AppCompatActivity() {
         }
         return hDosList
     }
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+* Manage groups of media files
+* On Android 11 and higher, ask the user to select a group of media files,
+* then update these media files in a single operation. These methods offer better
+* consistency across devices, and the methods make it easier for users to manage
+* their media collections.
+*
+* The methods that provide this "batch update" functionality include the following:
+*
+* createWriteRequest()
+*       Request that the user grant your app write access to the specified group of media files.
+*
+*  createFavoriteRequest()
+*       Request that the user marks the specified media files as some of their
+*        "favorite" media on the device. Any app that has read access to this
+*         file can see that the user has marked the file as a "favorite".
+*
+* createTrashRequest()
+*       Request that the user place the specified media files in the device's trash.
+*        Items in the trash are permanently deleted after a system-defined time period.
+*
+* createDeleteRequest()
+*       Request that the user permanently delete the specified media files immediately,
+*        without placing them in the trash beforehand.
+*
+*
+* After calling any of these methods, the system builds a PendingIntent object.
+*  After app invokes this intent, users see a dialog that requests their consent
+* for the app to update or delete the specified media files.
+* */
 
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    fun hCreateWriteRequest(uri: List<Uri>) {
+        /* A collection of content URIs to modify. */
+        val editPendingIntent = MediaStore.createWriteRequest(
+            contentResolver,
+            uri
+        )
+
+        // Launch a system prompt requesting user permission for the operation.
+        // on Activity result is called after the user inputs.
+        startIntentSenderForResult(
+            editPendingIntent.intentSender, 12,
+            null, 0, 0, 0
+        )
+    }
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
     data class Video(
         val uri: Uri,
