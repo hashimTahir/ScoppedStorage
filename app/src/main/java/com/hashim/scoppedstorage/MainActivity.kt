@@ -15,6 +15,7 @@ import com.hashim.scoppedstorage.downloadImage.DownLoadImageActivity
 import com.hashim.scoppedstorage.file.FileActivity
 import com.hashim.scoppedstorage.foldertree.OpenFolderActivity
 import com.hashim.scoppedstorage.imagepicker.ImagePickerActivity
+import com.hashim.scoppedstorage.madesimple.ExplanationActivity
 
 class MainActivity : AppCompatActivity() {
     lateinit var hActivityMainBinding: ActivityMainBinding
@@ -46,6 +47,10 @@ class MainActivity : AppCompatActivity() {
         }
         hActivityMainBinding.hOpenDocTreeB.setOnClickListener {
             startActivity(Intent(this, OpenFolderActivity::class.java))
+        }
+
+        hActivityMainBinding.hSimplified.setOnClickListener {
+            startActivity(Intent(this, ExplanationActivity::class.java))
         }
     }
 

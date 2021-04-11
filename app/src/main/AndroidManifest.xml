@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ScoppedStorage">
-        <activity android:name=".foldertree.OpenFolderActivity"></activity>
+        <activity android:name=".madesimple.ExplanationActivity"></activity>
+        <activity android:name=".foldertree.OpenFolderActivity" />
         <activity android:name=".file.FileActivity" />
         <activity android:name=".accessMedia.AccessMediaLocationActivity" />
         <activity android:name=".downloadImage.DownLoadImageActivity" />
