@@ -6,11 +6,16 @@ package com.hashim.scoppedstorage.madesimple
 
 import android.content.ContentUris
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Size
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.exifinterface.media.ExifInterface
 import com.hashim.scoppedstorage.databinding.ActivityExplanationBinding
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -101,6 +106,119 @@ class ExplanationActivity : AppCompatActivity() {
                 }
             }
         }
+
+    }
+
+    fun hOpenFileWithDescriptor(uri: Uri) {
+        // Open a specific media item using ParcelFileDescriptor.
+        val hContentResolver = applicationContext.contentResolver
+
+        // "rw" for read-and-write;
+        // "rwt" for truncating or overwriting existing file contents.
+        val readOnlyMode = "r"
+        hContentResolver.openFileDescriptor(uri, readOnlyMode).use { file ->
+            // Perform operations on file
+        }
+    }
+
+    fun hOpenFileWithFileStream(uri: Uri) {
+        // Open a specific media item using InputStream.
+        val hResolver = applicationContext.contentResolver
+        hResolver.openInputStream(uri).use { stream ->
+            // Perform operations on "stream".
+        }
+
+    }
+
+
+
+
+    /*
+    * Apps that target Android 10 or higher can access the unique name that the system assigns
+    * to each external storage volume. This naming system helps to efficiently organize and
+    * index content, and it gives control over where new media files are stored.
+    *
+    * The following volumes are particularly useful to keep in mind:
+    *
+    *   1-> The VOLUME_EXTERNAL volume provides a view of all shared storage volumes on the device.
+    *       one can read the contents of this synthetic volume, but cannot modify the contents.
+    *   2-> The VOLUME_EXTERNAL_PRIMARY volume represents the primary shared storage volume on
+    *       the device. One can read and modify the contents of this volume.
+    *
+    * One can discover other volumes by calling MediaStore.getExternalVolumeNames():
+    *
+    * */
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun hGetVolumes() {
+        val hVolumesNames: Set<String> = MediaStore.getExternalVolumeNames(this)
+        val hFirstVolumeName = hVolumesNames.iterator().next()
+
+    }
+
+
+    /*
+    * Location where media was captured
+    * Some photographs and videos contain location information in their metadata,
+    * which shows the place where a photograph was taken or where a video was recorded.
+    * For Photographs If  app uses scoped storage, the system hides location information by default.
+    * To access this information, following steps are required.
+    *
+    * Request the ACCESS_MEDIA_LOCATION permission in app's manifest.
+    *
+    * From  MediaStore object, get the exact bytes of the photograph by
+    * calling setRequireOriginal() and pass in the URI of the photograph.
+    *
+    * */
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun hGetPhotoLocationInfo(hIdColumn: Int, cursor: Cursor) {
+        var hPhotoUri: Uri = Uri.withAppendedPath(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            cursor.getString(hIdColumn)
+        )
+
+        // Get location data using the Exifinterface library.
+        // Exception occurs if ACCESS_MEDIA_LOCATION permission isn't granted.
+        hPhotoUri = MediaStore.setRequireOriginal(hPhotoUri)
+        contentResolver.openInputStream(hPhotoUri)?.use { stream ->
+            ExifInterface(stream).run {
+                // If lat/long is null, fall back to the coordinates (0, 0).
+                val latLong = latLong ?: doubleArrayOf(0.0, 0.0)
+            }
+        }
+
+    }
+
+    /*
+    * To access location information within a video's metadata, use the
+    * MediaMetadataRetriever class, app doesn't need to request any additional
+    *  permissions to use this class.
+    * */
+
+    private fun hExtractVideoLocationInfo(hIdColumn: Long) {
+
+        val hVideoUri: Uri = ContentUris.withAppendedId(
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+            hIdColumn
+        )
+
+        val hMediaMetaDataRetriever = MediaMetadataRetriever()
+        val hContext = applicationContext
+        try {
+            hMediaMetaDataRetriever.setDataSource(hContext, hVideoUri)
+        } catch (e: RuntimeException) {
+            Timber.d("Cannot retrieve video file $e")
+        }
+        // Metadata should use a standardized format.
+        val hLocationMetaData: String? =
+            hMediaMetaDataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_LOCATION)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun hCreateThumbNail(uri: Uri) {
+        val hThumbNail: Bitmap =
+            applicationContext.contentResolver.loadThumbnail(
+                uri, Size(640, 480), null
+            )
 
     }
 
